@@ -1,14 +1,11 @@
-#include "core.h"
-#include "info.h"
+#include <iostream>
+#include <SDL2/SDL.h>
 
-#include <QApplication>
-
-int main(int argc, char *argv[])
-{
-    QApplication app(argc, argv);
-    Core multibox;
-    printf("Welcome to MultiBox\n");
-    printf("Version %s\nBuilt on %s at %s\n", version, __DATE__, __TIME__);
-    multibox.showMaximized();
-    return app.exec();
+int main(int, char**){
+	if (SDL_Init(SDL_INIT_VIDEO) != 0){
+		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
+		return 1;
+	}
+	SDL_Quit();
+	return 0;
 }
