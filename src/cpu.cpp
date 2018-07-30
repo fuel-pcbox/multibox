@@ -3,7 +3,7 @@
 
 #include "cpu_ops_table.h"
 
-#include "cpu_ops_jump.h"
+#include "cpu_ops.h"
 
 void cpu_t::unhandled_opcode()
 {
@@ -13,6 +13,7 @@ void cpu_t::unhandled_opcode()
 void cpu_t::init(cpu_type _type)
 {
     type = _type;
+    delayed_interrupt_enable = false;
     eflags.whole = 2;
 
     for(int i = 0; i < 6; i++)
@@ -42,8 +43,14 @@ void cpu_t::init(cpu_type _type)
 
     for(auto op_info : cpu_opcode_table)
     {
-        opcode_table_1byte_16[op_info.opcode] = op_info.handler16;
-        opcode_table_1byte_32[op_info.opcode] = op_info.handler32;
+        if(op_info.flags & OP_2BYTE)
+        {
+        }
+        else
+        {
+            opcode_table_1byte_16[op_info.opcode] = op_info.handler16;
+            opcode_table_1byte_32[op_info.opcode] = op_info.handler32;
+        }
     }
 }
 
@@ -379,25 +386,35 @@ void cpu_t::wl(x86seg* segment, u32 offset, u32 data)
     wl_phys(addr, data);
 }
 
+void cpu_t::decode_opcode()
+{
+    u8 opcode = fetchb(ip++);
+    instruction[opcode_length] = opcode;
+    opcode_length++;
+    if(opcode_length == 15) throw cpu_exception(exception_type::FAULT, ABRT_GPF, 0, true);
+    printf("Opcode:%02x\nCS:%04x\nEIP:%08x\n", opcode, segs[cs].selector, ip - 1);
+    if(operand_size)
+    {
+        if(opcode_table_1byte_32[opcode]) (this->*opcode_table_1byte_32[opcode])();
+    }
+    else
+    {
+        if(opcode_table_1byte_16[opcode]) (this->*opcode_table_1byte_16[opcode])();
+    }
+}
+
 void cpu_t::tick()
 {
     operand_size = address_size = (segs[cs].flags >> 14) & 1;
     opcode_length = 0;
+    if(delayed_interrupt_enable)
+    {
+        eflags.intr = 1;
+        delayed_interrupt_enable = false;
+    }
     try
     {
-        u8 opcode = fetchb(ip++);
-        instruction[opcode_length] = opcode;
-        opcode_length++;
-        if(opcode_length == 15) throw cpu_exception(exception_type::FAULT, ABRT_GPF, 0, true);
-        printf("Opcode:%02x\nCS:%04x\nEIP:%08x\n", opcode, segs[cs].selector, ip - 1);
-        if(operand_size)
-        {
-            if(opcode_table_1byte_32[opcode]) (this->*opcode_table_1byte_32[opcode])();
-        }
-        else
-        {
-            if(opcode_table_1byte_16[opcode]) (this->*opcode_table_1byte_16[opcode])();
-        }
+        decode_opcode();
     }
     catch(const cpu_exception& e)
     {

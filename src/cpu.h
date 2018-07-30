@@ -56,7 +56,7 @@ struct cpu_t
             u32 intr : 1;
             u32 direction : 1;
             u32 overflow : 1;
-            u32 io_priv_level : 2;
+            u32 iopl : 2;
             u32 nested_task : 1;
             u32 reserved4 : 1;
             u32 resume : 1;
@@ -78,6 +78,7 @@ struct cpu_t
     int opcode_length;
 
     bool operand_size, address_size;
+    bool delayed_interrupt_enable;
 
     void* device;
 
@@ -111,10 +112,36 @@ struct cpu_t
     opcode_func opcode_table_1byte_16[256];
     opcode_func opcode_table_1byte_32[256];
 
+    void mov_al_i8();
+    void mov_cl_i8();
+    void mov_dl_i8();
+    void mov_bl_i8();
+    void mov_ah_i8();
+    void mov_ch_i8();
+    void mov_dh_i8();
+    void mov_bh_i8();
+    void cli();
+    void sti();
     void unhandled_opcode();
 
+    void mov_ax_i16();
+    void mov_cx_i16();
+    void mov_dx_i16();
+    void mov_bx_i16();
+    void mov_sp_i16();
+    void mov_bp_i16();
+    void mov_si_i16();
+    void mov_di_i16();
     void jmp_abs16();
 
+    void mov_eax_i32();
+    void mov_ecx_i32();
+    void mov_edx_i32();
+    void mov_ebx_i32();
+    void mov_esp_i32();
+    void mov_ebp_i32();
+    void mov_esi_i32();
+    void mov_edi_i32();
     void jmp_abs32();
 
     void init(cpu_type _type);
@@ -144,6 +171,8 @@ struct cpu_t
     void wb(x86seg* segment, u32 addr, u8 data);
     void ww(x86seg* segment, u32 addr, u16 data);
     void wl(x86seg* segment, u32 addr, u32 data);
+
+    void decode_opcode();
 
     void tick();
     void run(s64 cycles);
