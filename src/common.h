@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <cstring>
 #include <algorithm>
+#include <exception>
 #include <functional>
 #include <iostream>
 #include <string>
@@ -32,3 +33,10 @@ struct u128
     u128() = default;
     u128(const u128& other) = default;
 };
+
+typedef u32 addr_t;
+
+inline void unimplemented(const std::string msg)
+{
+    throw std::runtime_error(msg);
+}

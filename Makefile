@@ -1,8 +1,9 @@
 CXX=g++
 CFLAGS=-std=c++17 -g
-LIBS= -lmingw32 -mwindows -mconsole -lSDL2main -lSDL2
+LIBS=
 VPATH=src
-OBJ = main.o
+OBJ = cpu.o \
+main.o
 
 all: $(OBJ)
 	$(CXX) $(CFLAGS) $(OBJ) -o multibox $(LIBS)
