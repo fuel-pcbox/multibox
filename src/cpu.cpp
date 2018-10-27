@@ -119,7 +119,7 @@ void cpu_t::type_check(x86seg* segment, u32 offset, translate_kind kind)
         }
     } else {
         // TODO
-        printf("type_check_ref called with a system-type segment! Execution correctness is not guaranteed past this point!\n");
+        printf("type_check called with a system-type segment! Execution correctness is not guaranteed past this point!\n");
     }
 }
 

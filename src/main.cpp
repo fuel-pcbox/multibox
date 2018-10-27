@@ -10,7 +10,7 @@ u8 pc_rb(void* dev, addr_t addr)
     if(addr < 0xa0000) return low_ram[addr];
     else if(addr >= 0xe0000 && addr < 0x100000) return bios[addr & 0x1ffff];
     else if(addr >= 0xfffe0000) return bios[addr & 0x1ffff];
-    else return 0;
+    else return 0xff;
 }
 
 u16 pc_rw(void* dev, addr_t addr)
@@ -18,7 +18,7 @@ u16 pc_rw(void* dev, addr_t addr)
     if(addr < 0xa0000) return *(u16*)&low_ram[addr];
     else if(addr >= 0xe0000 && addr < 0x100000) return *(u16*)&bios[addr & 0x1ffff];
     else if(addr >= 0xfffe0000) return *(u16*)&bios[addr & 0x1ffff];
-    else return 0;
+    else return 0xffff;
 }
 
 u32 pc_rl(void* dev, addr_t addr)
@@ -26,7 +26,7 @@ u32 pc_rl(void* dev, addr_t addr)
     if(addr < 0xa0000) return *(u32*)&low_ram[addr];
     else if(addr >= 0xe0000 && addr < 0x100000) return *(u32*)&bios[addr & 0x1ffff];
     else if(addr >= 0xfffe0000) return *(u32*)&bios[addr & 0x1ffff];
-    else return 0;
+    else return 0xffffffff;
 }
 
 void pc_wb(void* dev, addr_t addr, u8 data)
