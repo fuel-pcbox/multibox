@@ -1,14 +1,14 @@
 #pragma once
 
+#include <algorithm>
 #include <cassert>
+#include <cinttypes>
 #include <climits>
 #include <cmath>
-#include <cinttypes>
-#include <cstdlib>
 #include <cstdint>
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
-#include <algorithm>
 #include <exception>
 #include <functional>
 #include <iostream>
@@ -31,12 +31,9 @@ struct u128
     u64 hi;
 
     u128() = default;
-    u128(const u128& other) = default;
+    u128(const u128 &other) = default;
 };
 
 typedef u32 addr_t;
 
-inline void unimplemented(const std::string msg)
-{
-    throw std::runtime_error(msg);
-}
+inline void unimplemented(const std::string msg) { throw std::runtime_error(msg); }
