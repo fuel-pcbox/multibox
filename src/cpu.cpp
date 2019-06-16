@@ -64,6 +64,18 @@ void cpu_t::ww_phys(addr_t addr, u16 data) { ww_real(device, addr, data); }
 
 void cpu_t::wl_phys(addr_t addr, u32 data) { wl_real(device, addr, data); }
 
+u8 cpu_t::iorb(u16 addr) { return iorb_real(device, addr); }
+
+u16 cpu_t::iorw(u16 addr) { return iorw_real(device, addr); }
+
+u32 cpu_t::iorl(u16 addr) { return iorl_real(device, addr); }
+
+void cpu_t::iowb(u16 addr, u8 data) { iowb_real(device, addr, data); }
+
+void cpu_t::ioww(u16 addr, u16 data) { ioww_real(device, addr, data); }
+
+void cpu_t::iowl(u16 addr, u32 data) { iowl_real(device, addr, data); }
+
 void cpu_t::type_check(x86seg *segment, u32 offset, translate_kind kind)
 {
     bool not_system_seg = (segment->flags >> 4) & 1;

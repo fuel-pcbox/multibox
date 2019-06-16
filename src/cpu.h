@@ -115,6 +115,9 @@ struct cpu_t
     opcode_func opcode_table_1byte_16[256];
     opcode_func opcode_table_1byte_32[256];
 
+    void jmp_nz_i8();
+    void nop();
+    void test_al_i8();
     void mov_al_i8();
     void mov_cl_i8();
     void mov_dl_i8();
@@ -123,8 +126,12 @@ struct cpu_t
     void mov_ch_i8();
     void mov_dh_i8();
     void mov_bh_i8();
+    void in_al_i8();
+    void out_al_i8();
+    void jmp_rel8();
     void cli();
     void sti();
+    void cld();
     void unhandled_opcode();
 
     void mov_ax_i16();
@@ -135,6 +142,7 @@ struct cpu_t
     void mov_bp_i16();
     void mov_si_i16();
     void mov_di_i16();
+    void jmp_rel16();
     void jmp_abs16();
 
     void mov_eax_i32();
@@ -145,6 +153,7 @@ struct cpu_t
     void mov_ebp_i32();
     void mov_esi_i32();
     void mov_edi_i32();
+    void jmp_rel32();
     void jmp_abs32();
 
     void init(cpu_type _type);
@@ -174,6 +183,12 @@ struct cpu_t
     void wb(x86seg *segment, u32 addr, u8 data);
     void ww(x86seg *segment, u32 addr, u16 data);
     void wl(x86seg *segment, u32 addr, u32 data);
+    u8 iorb(u16 addr);
+    u16 iorw(u16 addr);
+    u32 iorl(u16 addr);
+    void iowb(u16 addr, u8 data);
+    void ioww(u16 addr, u16 data);
+    void iowl(u16 addr, u32 data);
 
     void decode_opcode();
 

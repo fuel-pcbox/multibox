@@ -59,6 +59,25 @@ void pc_wl(void *dev, addr_t addr, u32 data)
         *(u32 *)&low_ram[addr] = data;
 }
 
+u8 pc_iorb(void* dev, u16 addr)
+{
+    switch(addr)
+    {
+        case 0x64:
+        {
+            return 0;
+        }
+        default:
+        {
+            return 0xff;
+        }
+    }
+}
+
+void pc_iowb(void* dev, u16 addr, u8 data)
+{
+}
+
 int main(int ac, char **av)
 {
     printf("Welcome to multibox\n");
@@ -80,11 +99,14 @@ int main(int ac, char **av)
     cpu.ww_real = pc_ww;
     cpu.wl_real = pc_wl;
 
+    cpu.iorb_real = pc_iorb;
+    cpu.iowb_real = pc_iowb;
+
     FILE *fp = fopen(av[1], "rb");
     fread(bios + 0x10000, 1, 0x10000, fp);
     fclose(fp);
 
-    cpu.run(5);
+    cpu.run(20);
 
     return 0;
 }

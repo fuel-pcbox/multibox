@@ -1,3 +1,7 @@
+void cpu_t::nop()
+{
+}
+
 void cpu_t::cli()
 {
     bool protected_mode = cr[0] & 1;
@@ -20,4 +24,9 @@ void cpu_t::sti()
             throw cpu_exception(exception_type::FAULT, ABRT_GPF, 0, true);
     }
     delayed_interrupt_enable = true;
+}
+
+void cpu_t::cld()
+{
+    eflags.direction = 0;
 }
