@@ -425,6 +425,51 @@ void cpu_t::decode_opcode()
     }
 }
 
+u8 cpu_t::decode_modrm_reg16_size16()
+{
+    u8 modrm = fetchb(ip++);
+    mod_reg = (modrm >> 3) & 7;
+    u8 mod = (modrm >> 6) & 3;
+    mod_addr = 0;
+    if(mod == 3) mod_reg_mem = modrm & 7;
+    else
+    {
+        switch(mod)
+        {
+            case 0:
+            {
+                if((modrm & 7) == 6)
+                {
+                    mod_addr = (s16)fetchw(ip);
+                    ip += 2;
+                    return modrm;
+                }
+                break;
+            }
+            case 1: mod_addr = (s8)fetchb(ip++); break;
+            case 2: mod_addr = (s16)fetchw(ip); ip += 2; break;
+        }
+        switch(modrm & 7)
+        {
+            case 0: mod_addr += BX + SI; break;
+            case 1: mod_addr += BX + DI; break;
+            case 2: mod_addr += BP + SI; break;
+            case 3: mod_addr += BP + DI; break;
+            case 4: mod_addr += SI; break;
+            case 5: mod_addr += DI; break;
+            case 6: mod_addr += BP; break;
+            case 7: mod_addr += BX; break;
+        }
+    }
+    return modrm;
+}
+
+u8 cpu_t::decode_modrm(int register_size)
+{
+    if((register_size == REG_16BIT) && !address_size) return decode_modrm_reg16_size16();
+    else return 0;
+}
+
 void cpu_t::tick()
 {
     operand_size = address_size = (segs[cs].flags >> 14) & 1;

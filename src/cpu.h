@@ -26,6 +26,13 @@ union x86reg
     } b;
 };
 
+enum register_size
+{
+    REG_8BIT,
+    REG_16BIT,
+    REG_32BIT
+};
+
 struct x86seg
 {
     u16 selector;
@@ -41,6 +48,11 @@ struct cpu_t
     x86reg regs[8];
 
     x86seg segs[6];
+
+    int mod_seg;
+    int mod_reg;
+    int mod_reg_mem;
+    u32 mod_addr;
 
     union
     {
@@ -134,6 +146,7 @@ struct cpu_t
     void cld();
     void unhandled_opcode();
 
+    void grp1_ev_i16();
     void mov_ax_i16();
     void mov_cx_i16();
     void mov_dx_i16();
@@ -191,6 +204,8 @@ struct cpu_t
     void iowl(u16 addr, u32 data);
 
     void decode_opcode();
+    u8 decode_modrm_reg16_size16();
+    u8 decode_modrm(int register_size);
 
     void tick();
     void run(s64 cycles);

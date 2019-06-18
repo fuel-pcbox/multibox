@@ -106,7 +106,7 @@ int main(int ac, char **av)
     fread(bios + 0x10000, 1, 0x10000, fp);
     fclose(fp);
 
-    cpu.run(20);
+    cpu.run(50);
 
     return 0;
 }

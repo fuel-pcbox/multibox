@@ -8,6 +8,7 @@ enum
 
 const cpu_t::opcode_info cpu_t::cpu_opcode_table[] = {
     {0x75, 0, 0, &cpu_t::jmp_nz_i8, &cpu_t::jmp_nz_i8, false},
+    {0x81, 0, 0, &cpu_t::grp1_ev_i16, nullptr, false},
     {0x90, 0, 0, &cpu_t::nop, &cpu_t::nop, false},
     {0xa8, 0, 0, &cpu_t::test_al_i8, &cpu_t::test_al_i8, false},
     {0xb0, 0, 0, &cpu_t::mov_al_i8, &cpu_t::mov_al_i8, false},

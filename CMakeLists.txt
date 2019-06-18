@@ -13,6 +13,8 @@ endif()
 
 set(SOURCES
 src/common.h
+src/cpu_ops_arith.h
+src/cpu_ops_io.h
 src/cpu_ops_jump.h
 src/cpu_ops_misc.h
 src/cpu_ops_mov.h
