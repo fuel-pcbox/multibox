@@ -49,6 +49,8 @@ struct cpu_t
 
     x86seg segs[6];
 
+    int seg_prefix; //maxseg or above is code for default.
+
     int mod_seg;
     int mod_reg;
     int mod_reg_mem;

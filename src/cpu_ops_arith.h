@@ -26,7 +26,7 @@ void cpu_t::grp1_ev_i16()
             }
             else
             {
-                u16 mem_read = rw(mod_seg, mod_addr);
+                u16 mem_read = rw((seg_prefix < maxseg) ? seg_prefix : mod_seg, mod_addr);
                 result32 = mem_read - (s16)imm;
                 result = (u16)result;
                 if(imm > mem_read) eflags.carry = 1;

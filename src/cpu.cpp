@@ -475,6 +475,7 @@ void cpu_t::tick()
 {
     operand_size = address_size = (segs[cs].flags >> 14) & 1;
     opcode_length = 0;
+    seg_prefix = maxseg;
     if (delayed_interrupt_enable)
     {
         eflags.intr = 1;
