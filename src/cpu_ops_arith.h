@@ -24,6 +24,19 @@ void cpu_t::grp1_ev_i16()
                 if(imm_adj > reg_adj) eflags.aux_carry = 1;
                 else eflags.aux_carry = 0;
             }
+            else
+            {
+                u16 mem_read = rw(mod_seg, mod_addr);
+                result32 = mem_read - (s16)imm;
+                result = (u16)result;
+                if(imm > mem_read) eflags.carry = 1;
+                else eflags.carry = 0;
+
+                u8 imm_adj = imm & 0xf;
+                u8 reg_adj = mem_read & 0xf;
+                if(imm_adj > reg_adj) eflags.aux_carry = 1;
+                else eflags.aux_carry = 0;
+            }
 
             if(!result) eflags.zero = 1;
             else eflags.zero = 0;

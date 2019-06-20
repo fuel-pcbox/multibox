@@ -442,6 +442,7 @@ u8 cpu_t::decode_modrm_reg16_size16()
                 {
                     mod_addr = (s16)fetchw(ip);
                     ip += 2;
+                    mod_seg = ds;
                     return modrm;
                 }
                 break;
@@ -451,14 +452,14 @@ u8 cpu_t::decode_modrm_reg16_size16()
         }
         switch(modrm & 7)
         {
-            case 0: mod_addr += BX + SI; break;
-            case 1: mod_addr += BX + DI; break;
-            case 2: mod_addr += BP + SI; break;
-            case 3: mod_addr += BP + DI; break;
-            case 4: mod_addr += SI; break;
-            case 5: mod_addr += DI; break;
-            case 6: mod_addr += BP; break;
-            case 7: mod_addr += BX; break;
+            case 0: mod_addr += BX + SI; mod_seg = ds; break;
+            case 1: mod_addr += BX + DI; mod_seg = ds; break;
+            case 2: mod_addr += BP + SI; mod_seg = ss; break;
+            case 3: mod_addr += BP + DI; mod_seg = ss; break;
+            case 4: mod_addr += SI; mod_seg = ds; break;
+            case 5: mod_addr += DI; mod_seg = ds; break;
+            case 6: mod_addr += BP; mod_seg = ss; break;
+            case 7: mod_addr += BX; mod_seg = ds; break;
         }
     }
     return modrm;
